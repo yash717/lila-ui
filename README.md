@@ -27,6 +27,8 @@ bun run build
 
 Serve the `dist/` folder with any static file server (nginx, Caddy, `vite preview`, etc.). Point the same env values at wherever Nakama is reachable from the browser.
 
+**EC2 bootstrap:** `deploy/ec2-ui-setup.sh` installs git, nginx, Bun, clones `yash717/lila-ui`, builds with `VITE_*` pointing at your Nakama host (e.g. server public IP and port **80** if nginx fronts Nakama), and serves `dist/` on port 80. Open the **security group** for TCP **80**.
+
 ## Scripts
 
 | Command | Purpose |
