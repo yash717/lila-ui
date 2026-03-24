@@ -1,0 +1,28 @@
+import { Home, Gamepad2, Trophy, Settings, Bell, User2, Rocket, Swords, Timer, Search, PlusCircle, LogIn, History, Zap, Database, UserPlus, ShoppingCart, RotateCcw, Grid, Share2, LineChart, Award, TrendingUp } from 'lucide-react';
+
+export const ICONS = {
+  home: Home,
+  gamepad: Gamepad2,
+  leaderboard: Trophy,
+  settings: Settings,
+  notifications: Bell,
+  profile: User2,
+  rocket: Rocket,
+  swords: Swords,
+  timer: Timer,
+  search: Search,
+  add: PlusCircle,
+  login: LogIn,
+  history: History,
+  zap: Zap,
+  database: Database,
+  trophy: Trophy,
+  userPlus: UserPlus,
+  shoppingCart: ShoppingCart,
+  replay: RotateCcw,
+  grid: Grid,
+  share: Share2,
+  insights: LineChart,
+  militaryTech: Award,
+  trendingUp: TrendingUp,
+};
