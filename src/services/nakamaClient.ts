@@ -1,5 +1,5 @@
 import { Session, Socket } from "@heroiclabs/nakama-js";
-import { createNakamaClient, nakamaConfig } from "../config/nakama";
+import { createNakamaClient, getOrCreateDeviceId, nakamaConfig } from "../config/nakama";
 import type {
   CreateMatchRpcPayload,
   GetLeaderboardRpcPayload,
@@ -10,20 +10,9 @@ import type {
 
 const client = createNakamaClient();
 
-// --- Device ID persistence ---
-function getDeviceId(): string {
-  const key = "nebula_device_id";
-  let id = localStorage.getItem(key);
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem(key, id);
-  }
-  return id;
-}
-
 // --- Authentication ---
 export async function authenticate(username: string): Promise<Session> {
-  const deviceId = getDeviceId();
+  const deviceId = getOrCreateDeviceId();
   const session = await client.authenticateDevice(deviceId, true, username);
   await client.updateAccount(session, { display_name: username.trim() });
   return session;

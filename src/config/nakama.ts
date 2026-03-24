@@ -1,4 +1,5 @@
 import { Client } from '@heroiclabs/nakama-js';
+import { randomUUID } from '../lib/randomUUID';
 
 const host = import.meta.env.VITE_NAKAMA_HOST ?? '127.0.0.1';
 const port = import.meta.env.VITE_NAKAMA_PORT ?? '7350';
@@ -17,7 +18,7 @@ export function getOrCreateDeviceId(): string {
   try {
     let id = localStorage.getItem(DEVICE_KEY);
     if (!id) {
-      id = crypto.randomUUID();
+      id = randomUUID();
       localStorage.setItem(DEVICE_KEY, id);
     }
     return id;
