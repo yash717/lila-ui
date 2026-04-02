@@ -13,9 +13,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
   const { connectionStatus, error, session, username, logout } = useGame();
 
   const statusClass =
-    connectionStatus === 'connected' ||
-    connectionStatus === 'matchmaking' ||
-    connectionStatus === 'in_match'
+    connectionStatus === 'connected' || connectionStatus === 'matchmaking' || connectionStatus === 'in_match'
       ? 'text-primary'
       : connectionStatus === 'connecting'
         ? 'text-secondary'
@@ -74,7 +72,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
             {session?.token ? `${session.token.slice(0, 24)}…` : '—'}
           </div>
           <p className="text-on-surface-variant text-[10px] font-inter mt-3 leading-relaxed">
-            Tokens are kept in <span className="text-on-surface">localStorage</span> and a non-secret cookie flag so you stay signed in across refreshes. Clear data here to sign out on this device.
+            Tokens are kept in <span className="text-on-surface">localStorage</span> and a non-secret cookie flag so you
+            stay signed in across refreshes. Clear data here to sign out on this device.
           </p>
         </div>
 

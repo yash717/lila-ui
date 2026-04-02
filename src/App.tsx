@@ -67,10 +67,7 @@ function AppContent() {
         </>
       )}
 
-      <main className={cn(
-        "transition-all duration-500 pb-24 md:pb-0",
-        showNavigation ? "md:ml-64" : "ml-0"
-      )}>
+      <main className={cn('transition-all duration-500 pb-24 md:pb-0', showNavigation ? 'md:ml-64' : 'ml-0')}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentScreen}
@@ -84,9 +81,7 @@ function AppContent() {
         </AnimatePresence>
       </main>
 
-      {showNavigation && (
-        <BottomNav currentScreen={currentScreen} onScreenChange={setCurrentScreen} />
-      )}
+      {showNavigation && <BottomNav currentScreen={currentScreen} onScreenChange={setCurrentScreen} />}
 
       {/* Connection status indicator */}
       {connectionStatus === 'connecting' && (

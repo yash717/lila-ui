@@ -1,12 +1,12 @@
-import { Session, Socket } from "@heroiclabs/nakama-js";
-import { createNakamaClient, getOrCreateDeviceId, nakamaConfig } from "../config/nakama";
+import { Session, Socket } from '@heroiclabs/nakama-js';
+import { createNakamaClient, getOrCreateDeviceId, nakamaConfig } from '../config/nakama';
 import type {
   CreateMatchRpcPayload,
   GetLeaderboardRpcPayload,
   GetMatchHistoryRpcPayload,
   LeaderboardRecordRpc,
   MatchHistoryEntryRpc,
-} from "../types/nakamaRpc";
+} from '../types/nakamaRpc';
 
 const client = createNakamaClient();
 
@@ -26,7 +26,7 @@ export async function fetchDisplayName(session: Session): Promise<string> {
   if (display) return display;
   const un = u?.username?.trim();
   if (un) return un;
-  return "";
+  return '';
 }
 
 export interface OpenMatchRow {
@@ -39,22 +39,22 @@ export interface OpenMatchRow {
 
 /** Authoritative matches waiting for a second player (label.open + size 1). */
 export async function listOpenMatches(session: Session): Promise<OpenMatchRow[]> {
-  let resp = await client.listMatches(session, 40, true, undefined, 1, 1, "");
+  let resp = await client.listMatches(session, 40, true, undefined, 1, 1, '');
   if ((resp.matches ?? []).length === 0) {
-    resp = await client.listMatches(session, 40, true, undefined, undefined, undefined, "");
+    resp = await client.listMatches(session, 40, true, undefined, undefined, undefined, '');
   }
   const matches = resp.matches ?? [];
   const rows: OpenMatchRow[] = [];
   for (const m of matches) {
-    const id = m.match_id?.trim() ?? "";
-    if (!id.endsWith(".nebula_strike")) continue;
-    let host = "";
-    let mode = "classic";
+    const id = m.match_id?.trim() ?? '';
+    if (!id.endsWith('.nebula_strike')) continue;
+    let host = '';
+    let mode = 'classic';
     let open = false;
     try {
       const label = m.label ? (JSON.parse(m.label) as Record<string, unknown>) : {};
-      host = typeof label.host === "string" ? label.host : "";
-      mode = typeof label.mode === "string" ? label.mode : "classic";
+      host = typeof label.host === 'string' ? label.host : '';
+      mode = typeof label.mode === 'string' ? label.mode : 'classic';
       open = label.open === true;
     } catch {
       continue;
@@ -65,7 +65,7 @@ export async function listOpenMatches(session: Session): Promise<OpenMatchRow[]>
     rows.push({
       matchId: id,
       mode,
-      host: host || "Commander",
+      host: host || 'Commander',
       size,
     });
   }
@@ -91,14 +91,14 @@ export async function addMatchmaker(
   socket: Socket,
   mode: string,
   minCount = 2,
-  maxCount = 2
+  maxCount = 2,
 ): Promise<{ ticket: string }> {
   const ticket = await socket.addMatchmaker(
-    `+properties.mode:${mode}`,       // query: must match on mode
+    `+properties.mode:${mode}`, // query: must match on mode
     minCount,
     maxCount,
-    { mode },                          // string properties
-    {}                                 // numeric properties
+    { mode }, // string properties
+    {}, // numeric properties
   );
   return { ticket: ticket.ticket };
 }
@@ -109,11 +109,11 @@ export async function removeMatchmaker(socket: Socket, ticket: string): Promise<
 
 // --- Match operations ---
 export async function createMatch(session: Session, mode: string): Promise<string> {
-  const resp = await client.rpc(session, "create_match", { mode });
+  const resp = await client.rpc(session, 'create_match', { mode });
   const data = resp.payload as CreateMatchRpcPayload | undefined;
-  const id = data?.matchId?.trim() ?? "";
+  const id = data?.matchId?.trim() ?? '';
   if (!id) {
-    throw new Error("create_match RPC returned no matchId");
+    throw new Error('create_match RPC returned no matchId');
   }
   return id;
 }
@@ -136,7 +136,7 @@ export async function getLeaderboard(session: Session): Promise<{
   records: LeaderboardRecordRpc[];
   myRank: LeaderboardRecordRpc | null;
 }> {
-  const resp = await client.rpc(session, "get_leaderboard", {});
+  const resp = await client.rpc(session, 'get_leaderboard', {});
   const data = resp.payload as GetLeaderboardRpcPayload | undefined;
   return {
     records: data?.records ?? [],
@@ -146,7 +146,7 @@ export async function getLeaderboard(session: Session): Promise<{
 
 // --- Match History (user storage collection nebula_strike / combat_history) ---
 export async function getMatchHistory(session: Session): Promise<MatchHistoryEntryRpc[]> {
-  const resp = await client.rpc(session, "get_match_history", {});
+  const resp = await client.rpc(session, 'get_match_history', {});
   const data = resp.payload as GetMatchHistoryRpcPayload | undefined;
   return data?.entries ?? [];
 }

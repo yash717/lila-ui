@@ -1,12 +1,8 @@
-import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from "react";
-import { Session, type Socket, type MatchData, type MatchmakerMatched } from "@heroiclabs/nakama-js";
-import * as nakama from "../services/nakamaClient";
-import {
-  saveSessionPersisted,
-  loadSessionPersisted,
-  clearSessionPersisted,
-} from "../auth/sessionStorage";
-import { normalizeRoomCode } from "../lib/roomCode";
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
+import { Session, type Socket, type MatchData, type MatchmakerMatched } from '@heroiclabs/nakama-js';
+import * as nakama from '../services/nakamaClient';
+import { saveSessionPersisted, loadSessionPersisted, clearSessionPersisted } from '../auth/sessionStorage';
+import { normalizeRoomCode } from '../lib/roomCode';
 
 // --- Types matching server opcodes ---
 export interface ServerGameState {
@@ -40,13 +36,13 @@ export interface MatchHistoryEntry {
   opponent: string;
   opponentId: string;
   mode: string;
-  result: "victory" | "defeat" | "draw";
+  result: 'victory' | 'defeat' | 'draw';
   rpDelta: number;
   occurredAt: string;
   matchType: string;
 }
 
-type ConnectionStatus = "disconnected" | "connecting" | "connected" | "matchmaking" | "in_match";
+type ConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'matchmaking' | 'in_match';
 
 interface GameContextValue {
   // State
@@ -81,21 +77,21 @@ const GameContext = createContext<GameContextValue | null>(null);
 
 export function useGame(): GameContextValue {
   const ctx = useContext(GameContext);
-  if (!ctx) throw new Error("useGame must be used within <GameProvider>");
+  if (!ctx) throw new Error('useGame must be used within <GameProvider>');
   return ctx;
 }
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("disconnected");
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('disconnected');
   const [gameState, setGameState] = useState<ServerGameState | null>(null);
   const [gameOverResult, setGameOverResult] = useState<GameOverResult | null>(null);
   const [matchId, setMatchId] = useState<string | null>(null);
-  const [playerMark, setPlayerMark] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [selectedMode, setSelectedMode] = useState<string>("classic");
-  const [roomCode, setRoomCode] = useState<string>("");
+  const [playerMark, setPlayerMark] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [selectedMode, setSelectedMode] = useState<string>('classic');
+  const [roomCode, setRoomCode] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [matchmakerTicket, setMatchmakerTicket] = useState<string | null>(null);
 
@@ -134,16 +130,16 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!matched.match_id) return;
         const match = await nakama.joinMatch(socket, matched.match_id, matched.token);
         setMatchId(match.match_id);
-        setConnectionStatus("in_match");
+        setConnectionStatus('in_match');
         setMatchmakerTicket(null);
       } catch (err: any) {
-        setError("Failed to join matched game: " + err.message);
-        setConnectionStatus("connected");
+        setError('Failed to join matched game: ' + err.message);
+        setConnectionStatus('connected');
       }
     };
 
     socket.ondisconnect = () => {
-      setConnectionStatus("disconnected");
+      setConnectionStatus('disconnected');
     };
   }, []);
 
@@ -182,14 +178,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setupSocketListeners(socket, sess);
         setSession(sess);
         const fromAccount = await nakama.fetchDisplayName(sess);
-        const displayName = (fromAccount || stored.username || sess.username || "").trim();
+        const displayName = (fromAccount || stored.username || sess.username || '').trim();
         setUsername(displayName);
         saveSessionPersisted({
           token: sess.token,
           refreshToken: sess.refresh_token,
           username: displayName || stored.username,
         });
-        setConnectionStatus("connected");
+        setConnectionStatus('connected');
       } catch {
         clearSessionPersisted();
         socketRef.current?.disconnect(false);
@@ -214,59 +210,62 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     socketRef.current = null;
     clearSessionPersisted();
     setSession(null);
-    setUsername("");
-    setConnectionStatus("disconnected");
+    setUsername('');
+    setConnectionStatus('disconnected');
     setMatchId(null);
     setGameState(null);
     setGameOverResult(null);
-    setPlayerMark("");
-    setRoomCode("");
+    setPlayerMark('');
+    setRoomCode('');
     setMatchmakerTicket(null);
     setError(null);
   }, []);
 
-  const authenticate = useCallback(async (name: string) => {
-    try {
-      setConnectionStatus("connecting");
-      setError(null);
+  const authenticate = useCallback(
+    async (name: string) => {
+      try {
+        setConnectionStatus('connecting');
+        setError(null);
 
-      socketRef.current?.disconnect(false);
-      socketRef.current = null;
+        socketRef.current?.disconnect(false);
+        socketRef.current = null;
 
-      const sess = await nakama.authenticate(name);
-      const fromAccount = await nakama.fetchDisplayName(sess);
-      const displayName = (fromAccount || name.trim()).trim();
-      saveSessionPersisted({
-        token: sess.token,
-        refreshToken: sess.refresh_token,
-        username: displayName,
-      });
-      setSession(sess);
-      setUsername(displayName);
+        const sess = await nakama.authenticate(name);
+        const fromAccount = await nakama.fetchDisplayName(sess);
+        const displayName = (fromAccount || name.trim()).trim();
+        saveSessionPersisted({
+          token: sess.token,
+          refreshToken: sess.refresh_token,
+          username: displayName,
+        });
+        setSession(sess);
+        setUsername(displayName);
 
-      const socket = nakama.createSocket();
-      await nakama.connectSocket(socket, sess);
-      socketRef.current = socket;
+        const socket = nakama.createSocket();
+        await nakama.connectSocket(socket, sess);
+        socketRef.current = socket;
 
-      setupSocketListeners(socket, sess);
-      setConnectionStatus("connected");
-    } catch (err: any) {
-      setError("Authentication failed: " + err.message);
-      setConnectionStatus("disconnected");
-      throw err;
-    }
-  }, [setupSocketListeners]);
+        setupSocketListeners(socket, sess);
+        setConnectionStatus('connected');
+      } catch (err: any) {
+        setError('Authentication failed: ' + err.message);
+        setConnectionStatus('disconnected');
+        throw err;
+      }
+    },
+    [setupSocketListeners],
+  );
 
   const findMatch = useCallback(async () => {
-    if (!socketRef.current) throw new Error("Not connected");
+    if (!socketRef.current) throw new Error('Not connected');
     try {
       setError(null);
-      setConnectionStatus("matchmaking");
+      setConnectionStatus('matchmaking');
       const result = await nakama.addMatchmaker(socketRef.current, selectedMode);
       setMatchmakerTicket(result.ticket);
     } catch (err: any) {
-      setError("Matchmaking failed: " + err.message);
-      setConnectionStatus("connected");
+      setError('Matchmaking failed: ' + err.message);
+      setConnectionStatus('connected');
     }
   }, [selectedMode]);
 
@@ -275,15 +274,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await nakama.removeMatchmaker(socketRef.current, matchmakerTicket);
       setMatchmakerTicket(null);
-      setConnectionStatus("connected");
+      setConnectionStatus('connected');
     } catch (err: any) {
-      setError("Failed to cancel matchmaking: " + err.message);
+      setError('Failed to cancel matchmaking: ' + err.message);
     }
   }, [matchmakerTicket]);
 
   const createRoom = useCallback(async () => {
     if (!session || !socketRef.current) {
-      setError("Not connected — wait for connection or refresh.");
+      setError('Not connected — wait for connection or refresh.');
       return;
     }
     try {
@@ -293,20 +292,20 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const mid = match?.match_id ?? newMatchId;
       setMatchId(mid);
       setRoomCode(mid);
-      setConnectionStatus("in_match");
+      setConnectionStatus('in_match');
     } catch (err: any) {
-      setError("Failed to create room: " + (err?.message ?? String(err)));
+      setError('Failed to create room: ' + (err?.message ?? String(err)));
     }
   }, [session, selectedMode]);
 
   const joinRoom = useCallback(async (code: string) => {
     if (!socketRef.current) {
-      setError("Not connected — wait for connection or refresh.");
+      setError('Not connected — wait for connection or refresh.');
       return;
     }
     const normalized = normalizeRoomCode(code);
     if (!normalized) {
-      setError("Enter a room code (format: …uuid….nebula_strike).");
+      setError('Enter a room code (format: …uuid….nebula_strike).');
       return;
     }
     try {
@@ -315,20 +314,23 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const mid = match?.match_id ?? normalized;
       setMatchId(mid);
       setRoomCode(mid);
-      setConnectionStatus("in_match");
+      setConnectionStatus('in_match');
     } catch (err: any) {
-      setError("Failed to join room: " + (err?.message ?? String(err)));
+      setError('Failed to join room: ' + (err?.message ?? String(err)));
     }
   }, []);
 
-  const makeMove = useCallback(async (position: number) => {
-    if (!socketRef.current || !matchId) return;
-    try {
-      await nakama.sendMove(socketRef.current, matchId, position);
-    } catch (err: any) {
-      setError("Failed to send move: " + err.message);
-    }
-  }, [matchId]);
+  const makeMove = useCallback(
+    async (position: number) => {
+      if (!socketRef.current || !matchId) return;
+      try {
+        await nakama.sendMove(socketRef.current, matchId, position);
+      } catch (err: any) {
+        setError('Failed to send move: ' + err.message);
+      }
+    },
+    [matchId],
+  );
 
   const leaveMatchAction = useCallback(async () => {
     if (!socketRef.current || !matchId) return;
@@ -337,11 +339,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setMatchId(null);
       setGameState(null);
       setGameOverResult(null);
-      setPlayerMark("");
-      setRoomCode("");
-      setConnectionStatus("connected");
+      setPlayerMark('');
+      setRoomCode('');
+      setConnectionStatus('connected');
     } catch (err: any) {
-      setError("Failed to leave match: " + err.message);
+      setError('Failed to leave match: ' + err.message);
     }
   }, [matchId]);
 
@@ -349,10 +351,10 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setGameState(null);
     setGameOverResult(null);
     setMatchId(null);
-    setPlayerMark("");
-    setRoomCode("");
-    if (connectionStatus === "in_match") {
-      setConnectionStatus("connected");
+    setPlayerMark('');
+    setRoomCode('');
+    if (connectionStatus === 'in_match') {
+      setConnectionStatus('connected');
     }
   }, [connectionStatus]);
 

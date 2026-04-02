@@ -44,30 +44,41 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
             transition={{
               duration: 15 + Math.random() * 10,
               repeat: Infinity,
-              ease: "linear",
-              delay: Math.random() * 20
+              ease: 'linear',
+              delay: Math.random() * 20,
             }}
             className="absolute"
             style={{ left: `${Math.random() * 100}%` }}
           >
             {i % 2 === 0 ? (
-              <ICONS.replay className={cn("w-12 h-12", i % 3 === 0 ? "text-primary" : "text-secondary")} />
+              <ICONS.replay className={cn('w-12 h-12', i % 3 === 0 ? 'text-primary' : 'text-secondary')} />
             ) : (
-              <div className={cn("w-10 h-10 rounded-full border-4", i % 3 === 0 ? "border-tertiary" : "border-primary")} />
+              <div
+                className={cn('w-10 h-10 rounded-full border-4', i % 3 === 0 ? 'border-tertiary' : 'border-primary')}
+              />
             )}
           </motion.div>
         ))}
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-lg text-center mt-12 md:mt-0 relative z-10"
       >
-        <div className="inline-block mb-4 px-4 py-1 rounded-full bg-primary/10 border border-primary/20">
-          <span className="text-primary font-orbitron text-[10px] tracking-[0.2em] uppercase font-bold">Nakama · Device login</span>
+        <div className="flex flex-wrap justify-center gap-3 mb-4">
+          <div className="inline-block px-4 py-1 rounded-full bg-primary/10 border border-primary/20">
+            <span className="text-primary font-orbitron text-[10px] tracking-[0.2em] uppercase font-bold">
+              Nakama · Device login
+            </span>
+          </div>
+          <div className="inline-block px-4 py-1 rounded-full bg-secondary/10 border border-secondary/20">
+            <span className="text-secondary font-orbitron text-[10px] tracking-[0.2em] uppercase font-bold">
+              CI/CD Implemented ✅
+            </span>
+          </div>
         </div>
-        
+
         <h1 className="font-orbitron text-5xl md:text-7xl lg:text-8xl font-black leading-tight flex flex-wrap justify-center gap-x-4">
           <span className="flex">
             <span className="text-primary neon-glow-primary">T</span>
@@ -85,13 +96,13 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
             <span className="text-tertiary neon-glow-tertiary">E</span>
           </span>
         </h1>
-        
+
         <p className="mt-8 text-on-surface-variant font-inter text-sm md:text-base max-w-xs mx-auto tracking-wide leading-relaxed">
           Dominate the cosmic grid — strategy, neon, and pure vibes. 😎 Session stays on this device after refresh. 👏
         </p>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.3 }}
@@ -117,14 +128,14 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
           <div className="bg-surface-container-highest/40 rounded-xl"></div>
           <div className="bg-surface-container-highest/40 rounded-xl"></div>
         </div>
-        
+
         <div className="absolute -top-4 -right-4 glass-panel px-4 py-2 rounded-xl border border-secondary/30 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
           <span className="text-[10px] font-orbitron font-bold text-secondary tracking-tighter">MULTIPLAYER ON</span>
         </div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
@@ -146,13 +157,12 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
             className="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary transition-all py-3 px-4 font-orbitron tracking-widest text-primary focus:outline-none placeholder:text-outline-variant/50 uppercase rounded-lg text-sm"
           />
           <p className="text-[10px] text-on-surface-variant/85 font-inter mt-3 leading-relaxed">
-            Stored as your <span className="text-on-surface font-medium">display name</span> on the Nakama server (Postgres) after login — we sync it back so it matches everywhere. 👏
+            Stored as your <span className="text-on-surface font-medium">display name</span> on the Nakama server
+            (Postgres) after login — we sync it back so it matches everywhere. 👏
           </p>
         </div>
 
-        {hint && (
-          <p className="text-secondary text-[10px] font-orbitron text-center tracking-wide px-2">{hint}</p>
-        )}
+        {hint && <p className="text-secondary text-[10px] font-orbitron text-center tracking-wide px-2">{hint}</p>}
 
         {error && (
           <div className="text-tertiary text-xs font-orbitron text-center px-4 py-2 bg-tertiary/10 rounded-xl border border-tertiary/20">
@@ -160,7 +170,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
           </div>
         )}
 
-        <button 
+        <button
           onClick={handleStart}
           disabled={isLoading}
           className="group relative w-full overflow-hidden rounded-2xl bg-primary py-5 px-8 transition-all active:scale-95 shadow-[0_0_20px_rgba(164,255,185,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
@@ -171,22 +181,18 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
             <ICONS.rocket className="w-6 h-6" />
           </span>
         </button>
-        
+
         <div className="flex gap-4">
           <button
             type="button"
-            onClick={() =>
-              focusCallsign('Sign in with START MISSION first — then use Training from the lobby.')
-            }
+            onClick={() => focusCallsign('Sign in with START MISSION first — then use Training from the lobby.')}
             className="flex-1 glass-panel border border-white/5 py-4 rounded-2xl text-on-surface font-orbitron text-xs font-bold tracking-widest hover:bg-white/10 transition-colors uppercase"
           >
             Training
           </button>
           <button
             type="button"
-            onClick={() =>
-              focusCallsign('Sign in with START MISSION first — Rankings opens from the nav after login.')
-            }
+            onClick={() => focusCallsign('Sign in with START MISSION first — Rankings opens from the nav after login.')}
             className="flex-1 glass-panel border border-white/5 py-4 rounded-2xl text-on-surface font-orbitron text-xs font-bold tracking-widest hover:bg-white/10 transition-colors uppercase"
           >
             Rankings

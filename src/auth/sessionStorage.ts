@@ -19,7 +19,7 @@ export function saveSessionPersisted(data: PersistedSession): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     // Non-httpOnly flag only — real secrets stay in localStorage
     const maxAge = 60 * 60 * 24 * 60; // ~60 days
-    const secure = typeof location !== "undefined" && location.protocol === "https:" ? "; Secure" : "";
+    const secure = typeof location !== 'undefined' && location.protocol === 'https:' ? '; Secure' : '';
     document.cookie = `${COOKIE_FLAG}=1; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
   } catch {
     /* private mode / quota */

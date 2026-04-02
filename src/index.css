@@ -1,23 +1,23 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --font-orbitron: "Orbitron", sans-serif;
-  --font-inter: "Inter", sans-serif;
-  --font-space-grotesk: "Space Grotesk", sans-serif;
+  --font-orbitron: 'Orbitron', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-space-grotesk: 'Space Grotesk', sans-serif;
 
   --color-surface: #0c0c1f;
   --color-surface-container-low: #111127;
   --color-surface-container-high: #1d1d37;
   --color-surface-container-highest: #23233f;
-  
+
   --color-primary: #a4ffb9;
   --color-primary-container: #00fd87;
   --color-on-primary: #004621;
-  
+
   --color-secondary: #00d2fd;
   --color-secondary-dim: #00c3eb;
   --color-on-secondary: #003a47;
-  
+
   --color-tertiary: #ff6c90;
   --color-tertiary-dim: #e50062;
   --color-on-tertiary: #48001a;

@@ -1,4 +1,28 @@
-import { Home, Gamepad2, Trophy, Settings, Bell, User2, Rocket, Swords, Timer, Search, PlusCircle, LogIn, History, Zap, Database, UserPlus, ShoppingCart, RotateCcw, Grid, Share2, LineChart, Award, TrendingUp } from 'lucide-react';
+import {
+  Home,
+  Gamepad2,
+  Trophy,
+  Settings,
+  Bell,
+  User2,
+  Rocket,
+  Swords,
+  Timer,
+  Search,
+  PlusCircle,
+  LogIn,
+  History,
+  Zap,
+  Database,
+  UserPlus,
+  ShoppingCart,
+  RotateCcw,
+  Grid,
+  Share2,
+  LineChart,
+  Award,
+  TrendingUp,
+} from 'lucide-react';
 
 export const ICONS = {
   home: Home,

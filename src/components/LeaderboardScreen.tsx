@@ -61,7 +61,10 @@ export const LeaderboardScreen: React.FC = () => {
     <div className="max-w-4xl mx-auto px-6 py-8 relative z-10">
       <div className="mb-10 text-center md:text-left">
         <h1 className="font-orbitron text-4xl font-black tracking-tight text-on-surface mb-2">
-          GLOBAL LEADERBOARD <span className="inline-block" aria-hidden="true">😎</span>
+          GLOBAL LEADERBOARD{' '}
+          <span className="inline-block" aria-hidden="true">
+            😎
+          </span>
         </h1>
         <p className="text-on-surface-variant font-medium tracking-widest uppercase text-[10px] flex flex-wrap items-center justify-center md:justify-start gap-2">
           <ICONS.trophy className="w-4 h-4 text-primary shrink-0" />
@@ -75,7 +78,9 @@ export const LeaderboardScreen: React.FC = () => {
       {myStanding && (
         <div className="mb-6 glass-panel rounded-2xl border border-primary/30 px-6 py-4 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="text-[10px] font-orbitron text-on-surface-variant uppercase tracking-widest mb-1">Your standing</div>
+            <div className="text-[10px] font-orbitron text-on-surface-variant uppercase tracking-widest mb-1">
+              Your standing
+            </div>
             <div className="font-orbitron text-lg text-on-surface">
               Rank <span className="text-primary font-black">#{myStanding.rank}</span>
               <span className="text-on-surface-variant mx-2">·</span>
@@ -106,7 +111,9 @@ export const LeaderboardScreen: React.FC = () => {
           <span className="text-5xl mb-4" aria-hidden="true">
             🤯
           </span>
-          <h3 className="font-orbitron text-lg text-on-surface-variant uppercase tracking-widest mb-2">No Rankings Yet</h3>
+          <h3 className="font-orbitron text-lg text-on-surface-variant uppercase tracking-widest mb-2">
+            No Rankings Yet
+          </h3>
           <p className="text-on-surface-variant text-sm opacity-70 text-center max-w-sm">
             Play matches — wins and losses both write to this board. 😎
           </p>
@@ -131,7 +138,7 @@ export const LeaderboardScreen: React.FC = () => {
                   className={cn(
                     'grid grid-cols-12 gap-3 px-4 sm:px-6 py-4 items-center transition-colors',
                     isCurrentUser ? 'bg-primary/10 border-l-4 border-primary' : 'hover:bg-white/5',
-                    player.rank <= 3 && 'bg-surface-container-high/30'
+                    player.rank <= 3 && 'bg-surface-container-high/30',
                   )}
                 >
                   <div className="col-span-2 sm:col-span-1 font-orbitron font-black text-on-surface-variant flex items-center gap-1 min-w-0">
@@ -148,7 +155,7 @@ export const LeaderboardScreen: React.FC = () => {
                       <div
                         className={cn(
                           'font-orbitron font-bold text-sm truncate',
-                          isCurrentUser ? 'text-primary' : 'text-on-surface'
+                          isCurrentUser ? 'text-primary' : 'text-on-surface',
                         )}
                       >
                         {player.username || 'Commander'}
@@ -161,8 +168,7 @@ export const LeaderboardScreen: React.FC = () => {
                     </div>
                   </div>
                   <div className="col-span-4 sm:col-span-3 text-right font-orbitron font-black text-on-surface tabular-nums">
-                    {player.score}{' '}
-                    <span className="text-[10px] text-on-surface-variant font-bold">RP</span>
+                    {player.score} <span className="text-[10px] text-on-surface-variant font-bold">RP</span>
                   </div>
                 </motion.div>
               );

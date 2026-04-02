@@ -37,10 +37,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
   const combatRows = useMemo(() => {
     const uid = session?.user_id;
     return matchHistory.filter(
-      (e) =>
-        Boolean(e.opponentId?.trim()) &&
-        e.opponentId !== uid &&
-        Boolean(String(e.opponent ?? '').trim())
+      (e) => Boolean(e.opponentId?.trim()) && e.opponentId !== uid && Boolean(String(e.opponent ?? '').trim()),
     );
   }, [matchHistory, session?.user_id]);
 
@@ -150,7 +147,9 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
         <p className="text-on-surface-variant text-[10px] font-orbitron uppercase tracking-widest flex flex-wrap gap-x-2 gap-y-1">
           <span className="text-secondary">{connectionStatus}</span>
           <span>·</span>
-          <span>{openRooms.length} open room{openRooms.length === 1 ? '' : 's'}</span>
+          <span>
+            {openRooms.length} open room{openRooms.length === 1 ? '' : 's'}
+          </span>
         </p>
       </div>
 
@@ -164,7 +163,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
             <span
               className={cn(
                 'w-2 h-2 rounded-full shrink-0',
-                connectionStatus === 'connected' ? 'bg-primary animate-pulse' : 'bg-tertiary'
+                connectionStatus === 'connected' ? 'bg-primary animate-pulse' : 'bg-tertiary',
               )}
             />
             <span>Connection: {connectionStatus}</span>
@@ -173,7 +172,9 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
         </div>
         <div className="flex flex-col items-end gap-2 text-right">
           <div className="glass-panel px-4 py-2 rounded-xl border border-outline-variant/20 min-w-[10rem]">
-            <div className="text-[9px] font-orbitron text-on-surface-variant uppercase tracking-widest">Open rooms (live)</div>
+            <div className="text-[9px] font-orbitron text-on-surface-variant uppercase tracking-widest">
+              Open rooms (live)
+            </div>
             <div className="font-orbitron font-black text-xl text-primary">{openRooms.length}</div>
             {roomsUpdatedAt && (
               <div className="text-[9px] font-inter text-on-surface-variant/70 mt-1">
@@ -195,9 +196,12 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
       {roomCode && (
         <div className="mb-6 glass-panel px-6 py-4 rounded-2xl border border-primary/30 text-center space-y-3">
           <span className="text-[10px] font-orbitron text-on-surface-variant uppercase tracking-widest block">
-            Your room is listed under <span className="text-secondary">Open rooms</span> for other players — or copy the id to share. <span aria-hidden="true">🤯</span>
+            Your room is listed under <span className="text-secondary">Open rooms</span> for other players — or copy the
+            id to share. <span aria-hidden="true">🤯</span>
           </span>
-          <span className="font-orbitron text-primary text-sm font-bold tracking-[0.12em] break-all select-all block">{roomCode}</span>
+          <span className="font-orbitron text-primary text-sm font-bold tracking-[0.12em] break-all select-all block">
+            {roomCode}
+          </span>
           <button
             type="button"
             onClick={() => void copyRoomCode()}
@@ -213,44 +217,70 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
         {/* Left Column: Matchmaking Controls */}
         <div className="lg:col-span-7 space-y-6">
           <section className="glass-panel p-6 rounded-2xl border border-outline-variant/10">
-            <h3 className="font-orbitron text-sm font-bold tracking-widest text-on-surface-variant mb-6 uppercase">Select Protocol</h3>
+            <h3 className="font-orbitron text-sm font-bold tracking-widest text-on-surface-variant mb-6 uppercase">
+              Select Protocol
+            </h3>
             <div className="grid grid-cols-2 gap-4">
               <div
                 onClick={() => setSelectedMode('classic')}
                 className={cn(
-                  "relative p-4 rounded-xl cursor-pointer group transition-all",
+                  'relative p-4 rounded-xl cursor-pointer group transition-all',
                   selectedMode === 'classic'
-                    ? "border-2 border-primary bg-primary/5"
-                    : "border border-outline-variant/30 hover:border-primary/50 bg-surface-container-high"
+                    ? 'border-2 border-primary bg-primary/5'
+                    : 'border border-outline-variant/30 hover:border-primary/50 bg-surface-container-high',
                 )}
               >
                 <div className="flex justify-between items-start mb-4">
-                  <ICONS.swords className={cn("w-8 h-8", selectedMode === 'classic' ? "text-primary" : "text-on-surface-variant group-hover:text-primary transition-colors")} />
-                  <div className={cn(
-                    "w-4 h-4 rounded-full border-2 flex items-center justify-center",
-                    selectedMode === 'classic' ? "border-primary" : "border-outline-variant group-hover:border-primary transition-colors"
-                  )}>
+                  <ICONS.swords
+                    className={cn(
+                      'w-8 h-8',
+                      selectedMode === 'classic'
+                        ? 'text-primary'
+                        : 'text-on-surface-variant group-hover:text-primary transition-colors',
+                    )}
+                  />
+                  <div
+                    className={cn(
+                      'w-4 h-4 rounded-full border-2 flex items-center justify-center',
+                      selectedMode === 'classic'
+                        ? 'border-primary'
+                        : 'border-outline-variant group-hover:border-primary transition-colors',
+                    )}
+                  >
                     {selectedMode === 'classic' && <div className="w-2 h-2 bg-primary rounded-full" />}
                   </div>
                 </div>
                 <div className="font-orbitron font-bold text-on-surface">Classic</div>
-                <div className="text-[10px] text-on-surface-variant uppercase tracking-wider mt-1">Standard Ruleset</div>
+                <div className="text-[10px] text-on-surface-variant uppercase tracking-wider mt-1">
+                  Standard Ruleset
+                </div>
               </div>
               <div
                 onClick={() => setSelectedMode('timed')}
                 className={cn(
-                  "relative p-4 rounded-xl cursor-pointer group transition-all",
+                  'relative p-4 rounded-xl cursor-pointer group transition-all',
                   selectedMode === 'timed'
-                    ? "border-2 border-secondary bg-secondary/5"
-                    : "border border-outline-variant/30 hover:border-secondary/50 bg-surface-container-high"
+                    ? 'border-2 border-secondary bg-secondary/5'
+                    : 'border border-outline-variant/30 hover:border-secondary/50 bg-surface-container-high',
                 )}
               >
                 <div className="flex justify-between items-start mb-4">
-                  <ICONS.timer className={cn("w-8 h-8", selectedMode === 'timed' ? "text-secondary" : "text-on-surface-variant group-hover:text-secondary transition-colors")} />
-                  <div className={cn(
-                    "w-4 h-4 rounded-full border-2 flex items-center justify-center",
-                    selectedMode === 'timed' ? "border-secondary" : "border-outline-variant group-hover:border-secondary transition-colors"
-                  )}>
+                  <ICONS.timer
+                    className={cn(
+                      'w-8 h-8',
+                      selectedMode === 'timed'
+                        ? 'text-secondary'
+                        : 'text-on-surface-variant group-hover:text-secondary transition-colors',
+                    )}
+                  />
+                  <div
+                    className={cn(
+                      'w-4 h-4 rounded-full border-2 flex items-center justify-center',
+                      selectedMode === 'timed'
+                        ? 'border-secondary'
+                        : 'border-outline-variant group-hover:border-secondary transition-colors',
+                    )}
+                  >
                     {selectedMode === 'timed' && <div className="w-2 h-2 bg-secondary rounded-full" />}
                   </div>
                 </div>
@@ -261,26 +291,26 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
           </section>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <button 
+            <button
               type="button"
               onClick={handleFindMatch}
               disabled={roomActionBusy}
               className={cn(
-                "relative group overflow-hidden font-orbitron font-black py-8 rounded-2xl transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none",
+                'relative group overflow-hidden font-orbitron font-black py-8 rounded-2xl transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none',
                 isSearching
-                  ? "bg-tertiary text-on-tertiary shadow-[0_0_30px_rgba(255,108,144,0.3)]"
-                  : "bg-secondary text-on-secondary shadow-[0_0_30px_rgba(0,210,253,0.2)]"
+                  ? 'bg-tertiary text-on-tertiary shadow-[0_0_30px_rgba(255,108,144,0.3)]'
+                  : 'bg-secondary text-on-secondary shadow-[0_0_30px_rgba(0,210,253,0.2)]',
               )}
             >
               <div className="relative z-10 flex flex-col items-center">
-                <ICONS.search className={cn("w-10 h-10 mb-2", isSearching && "animate-spin")} />
+                <ICONS.search className={cn('w-10 h-10 mb-2', isSearching && 'animate-spin')} />
                 <span className="tracking-[0.2em]">{isSearching ? 'CANCEL SEARCH' : 'FIND MATCH'}</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="absolute inset-x-0 bottom-0 h-1 bg-white/30 overflow-hidden">
-                <motion.div 
+                <motion.div
                   animate={{ x: ['-100%', '300%'] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                   className="h-full bg-white w-1/3"
                 />
               </div>
@@ -293,9 +323,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
             >
               <div className="relative z-10 flex flex-col items-center">
                 <ICONS.add className="w-10 h-10 mb-2" />
-                <span className="tracking-[0.2em]">
-                  {roomBusy === 'creating' ? 'CREATING… 🤯' : 'CREATE ROOM'}
-                </span>
+                <span className="tracking-[0.2em]">{roomBusy === 'creating' ? 'CREATING… 🤯' : 'CREATE ROOM'}</span>
               </div>
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </button>
@@ -309,7 +337,8 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
                   Open rooms <span aria-hidden="true">👏</span>
                 </h3>
                 <p className="text-[10px] text-on-surface-variant/80 font-inter mt-1 max-w-xl leading-relaxed">
-                  Rooms waiting for a second player appear here automatically. Join one, or create your own — friends can find you here too. 😎
+                  Rooms waiting for a second player appear here automatically. Join one, or create your own — friends
+                  can find you here too. 😎
                 </p>
               </div>
               <button
@@ -322,11 +351,14 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
               </button>
             </div>
             {roomsLoading && openRooms.length === 0 && (
-              <p className="text-[10px] font-orbitron text-on-surface-variant uppercase tracking-widest py-4 text-center">Loading open rooms…</p>
+              <p className="text-[10px] font-orbitron text-on-surface-variant uppercase tracking-widest py-4 text-center">
+                Loading open rooms…
+              </p>
             )}
             {!roomsLoading && openRooms.length === 0 && (
               <p className="text-[10px] font-inter text-on-surface-variant/70 py-3 px-2 rounded-lg bg-surface-container-low/50 border border-outline-variant/10">
-                No open rooms right now. Use <span className="text-secondary font-orbitron">CREATE ROOM</span> — it appears here for everyone in the lobby. 🤯
+                No open rooms right now. Use <span className="text-secondary font-orbitron">CREATE ROOM</span> — it
+                appears here for everyone in the lobby. 🤯
               </p>
             )}
             {openRooms.length > 0 && (
@@ -340,7 +372,9 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
                       <div className="font-orbitron text-sm text-on-surface truncate">
                         Host: <span className="text-primary">{r.host}</span>
                       </div>
-                      <div className="text-[10px] font-mono text-on-surface-variant/80 truncate mt-0.5">{r.matchId}</div>
+                      <div className="text-[10px] font-mono text-on-surface-variant/80 truncate mt-0.5">
+                        {r.matchId}
+                      </div>
                       <div className="text-[10px] text-secondary uppercase tracking-wider mt-1">{r.mode} mode</div>
                     </div>
                     <button
@@ -367,7 +401,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
               <div className="flex items-center justify-center gap-3">
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                   className="w-6 h-6 border-2 border-secondary border-t-transparent rounded-full"
                 />
                 <span className="font-orbitron text-secondary text-sm tracking-widest uppercase">
@@ -402,11 +436,11 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
                 </div>
               )}
               {combatRows.map((entry) => (
-                <div 
+                <div
                   key={entry.id}
                   className={cn(
-                    "p-4 rounded-xl bg-surface-container-high border-l-4 transition-colors group",
-                    getResultColor(entry.result)
+                    'p-4 rounded-xl bg-surface-container-high border-l-4 transition-colors group',
+                    getResultColor(entry.result),
                   )}
                 >
                   <div className="flex justify-between items-center">
@@ -416,14 +450,16 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnterGame }) => {
                       </div>
                       <div>
                         <div className="font-orbitron font-bold text-sm">{entry.opponent}</div>
-                        <div className="text-[10px] text-on-surface-variant uppercase">{entry.matchType} • {entry.mode}</div>
+                        <div className="text-[10px] text-on-surface-variant uppercase">
+                          {entry.matchType} • {entry.mode}
+                        </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className={cn("font-orbitron font-black text-lg", getResultTextColor(entry.result))}>
+                      <div className={cn('font-orbitron font-black text-lg', getResultTextColor(entry.result))}>
                         {entry.result.toUpperCase()}
                       </div>
-                      <div className={cn("text-[10px] font-bold", getResultTextColor(entry.result) + '/60')}>
+                      <div className={cn('text-[10px] font-bold', getResultTextColor(entry.result) + '/60')}>
                         {entry.rpDelta > 0 ? `+${entry.rpDelta}` : entry.rpDelta} RP
                       </div>
                     </div>

@@ -41,9 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentScreen, onScreenChange 
           <div
             className={cn(
               'absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-surface',
-              connectionStatus === 'connected' ||
-              connectionStatus === 'matchmaking' ||
-              connectionStatus === 'in_match'
+              connectionStatus === 'connected' || connectionStatus === 'matchmaking' || connectionStatus === 'in_match'
                 ? 'bg-primary animate-pulse'
                 : 'bg-tertiary',
             )}
@@ -125,7 +123,9 @@ export const BottomNav: React.FC<SidebarProps> = ({ currentScreen, onScreenChang
 export const TopBar: React.FC = () => {
   return (
     <header className="bg-surface/80 backdrop-blur-xl border-b border-primary/10 sticky top-0 z-40 flex justify-between items-center w-full px-6 py-4 max-w-none shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
-      <div className="text-primary font-orbitron font-black text-xl tracking-tighter neon-glow-primary">NEBULA STRIKE</div>
+      <div className="text-primary font-orbitron font-black text-xl tracking-tighter neon-glow-primary">
+        NEBULA STRIKE
+      </div>
       <div className="flex items-center gap-4">
         <button type="button" className="text-primary hover:bg-primary/5 p-2 rounded-full transition-all">
           <ICONS.notifications className="w-6 h-6" />
