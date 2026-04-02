@@ -10,6 +10,9 @@ jobs:
   lint-and-build:
     name: Lint & Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -35,14 +38,23 @@ jobs:
         run: bun run format:check
         continue-on-error: true
 
-      - name: Build
-        run: bun run build
-        env:
-          # Dummy values so Vite build doesn't fail on missing env
-          VITE_NAKAMA_HOST: "localhost"
-          VITE_NAKAMA_PORT: "7350"
-          VITE_NAKAMA_SERVER_KEY: "ci-test-key"
-          VITE_NAKAMA_USE_SSL: "false"
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker build
-        run: docker build -t nebula-strike:ci .
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          build-args: |
+            VITE_NAKAMA_HOST=${{ secrets.NAKAMA_HOST }}
+            VITE_NAKAMA_PORT=${{ secrets.NAKAMA_PORT }}
+            VITE_NAKAMA_SERVER_KEY=${{ secrets.NAKAMA_SERVER_KEY }}
+            VITE_NAKAMA_USE_SSL=${{ secrets.NAKAMA_USE_SSL }}
+          tags: |
+            ghcr.io/${{ github.repository }}-ui:${{ github.sha }}
+            ghcr.io/${{ github.repository }}-ui:latest

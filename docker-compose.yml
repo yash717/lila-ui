@@ -1,0 +1,7 @@
+services:
+  ui:
+    container_name: nebula_ui_prod
+    image: ghcr.io/yash717/lila-ui:${IMAGE_TAG:-latest}
+    ports:
+      - "80:80"
+    restart: unless-stopped
