@@ -56,8 +56,8 @@ jobs:
             VITE_NAKAMA_SERVER_KEY=${{ secrets.NAKAMA_SERVER_KEY }}
             VITE_NAKAMA_USE_SSL=${{ secrets.NAKAMA_USE_SSL }}
           tags: |
-            ghcr.io/${{ github.repository }}-ui:${{ github.sha }}
-            ghcr.io/${{ github.repository }}-ui:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/${{ github.repository }}:latest
 
   deploy:
     name: Deploy to EC2
@@ -77,8 +77,14 @@ jobs:
           script: |
             set -e
 
+            if ! command -v docker &> /dev/null; then
+                echo "=== Installing Docker ==="
+                sudo apt-get update
+                sudo apt-get install -y docker.io docker-compose-v2
+            fi
+
             echo "=== Logging into GHCR ==="
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             echo "=== Pulling latest code ==="
             cd ~/lila-ui
@@ -86,7 +92,7 @@ jobs:
             git reset --hard origin/main
             
             # Save the currently running image SHA before updating (for rollback)
-            PREV_IMAGE=$(docker inspect --format='{{.Config.Image}}' nebula_ui_prod 2>/dev/null || echo "ghcr.io/yash717/lila-ui:latest")
+            PREV_IMAGE=$(sudo docker inspect --format='{{.Config.Image}}' nebula_ui_prod 2>/dev/null || echo "ghcr.io/yash717/lila-ui:latest")
             PREV_TAG=${PREV_IMAGE##*:}
 
             export IMAGE_TAG=${{ github.sha }}
@@ -99,10 +105,10 @@ jobs:
             fi
 
             echo "=== Pulling Image ($IMAGE_TAG) ==="
-            docker compose pull
+            sudo -E docker compose pull
 
             echo "=== Deploying ==="
-            docker compose up -d
+            sudo -E docker compose up -d
 
             echo "=== Health Check (30s wait) ==="
             RETRY=0
@@ -121,11 +127,11 @@ jobs:
               echo "✅ Frontend is healthy! Deploy successful."
             else
               echo "❌ Frontend failed health check! Triggering ROLLBACK."
-              docker compose logs --tail=50 ui
+              sudo -E docker compose logs --tail=50 ui
               
               echo "=== Rolling Back to $PREV_TAG ==="
               export IMAGE_TAG=$PREV_TAG
-              docker compose up -d
+              sudo -E docker compose up -d
               
               echo "✅ Rollback applied. Exiting with failure."
               exit 1
