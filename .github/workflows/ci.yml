@@ -27,7 +27,7 @@ jobs:
         run: bun run lint
 
       - name: ESLint
-        run: bun run lint:eslint
+        run: bunx eslint 'src/**/*.{ts,tsx}'
 
       - name: Prettier check
         run: bun run format:check
